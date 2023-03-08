@@ -1,0 +1,5 @@
+name: "Argocd Sync Application Action"
+description: "This action has the objective of simplify sync application in the argocd"
+runs:
+  using: "node16"
+  main: "index.js"
