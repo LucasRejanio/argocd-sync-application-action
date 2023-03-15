@@ -1,6 +1,6 @@
 const request = require('request');
 
-const err = require("./utils/error")
+const { err } = require("./utils/error")
 
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
