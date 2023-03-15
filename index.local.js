@@ -1,5 +1,3 @@
-const core = require("@actions/core");
-
 const secretManager = require("./src/utils/secret-manager")
 const configurator = require("./src/utils/configurator")
 const argocd = require("./src/argocd")
@@ -15,9 +13,9 @@ const getArgocdClientSecret = async (environmentPrefix) => {
 };
 
 const main = async () => {
-    const environmentPrefix = core.getInput("environment-prefix").toString();
-    const argocdHost = core.getInput("argocd-host").toString();
-    const argocdApplication = core.getInput("argocd-application").toString();
+    const environmentPrefix = "dev"
+    const argocdHost = "argocd-dev.owill.com.br"
+    const argocdApplication = "pong"
 
     await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication)
     const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);

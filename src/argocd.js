@@ -2,8 +2,7 @@ const request = require('request');
 
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
-    console.log("Open Session")
-    console.log(argocdClientSecret)
+    console.log("[Info]:: Starting open argocd session")
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/session`,
         method: 'POST',
@@ -20,11 +19,11 @@ const openSession = async (argocdClientSecret, argocdHost) => {
                 reject(new Error(error));
             } else {
                 if (response.statusCode == 200) {
-                    console.log(`[Info]:: session with argocd opened successfully!`);
+                    console.log(`[Info]:: Session with argocd opened successfully!`);
                     resolve(body['token']);
                 } else {
-                    console.log(`[Info]:: request to open argocd session returned status: ${response.statusCode}`);
-                    throw error("failed to open session in argocd")
+                    console.log(`[Info]:: Request to open argocd session returned status: ${response.statusCode}`);
+                    throw error("Failed to open session in argocd")
                 }
             }
         });
@@ -34,7 +33,6 @@ const openSession = async (argocdClientSecret, argocdHost) => {
 // syncApplication is responsable for send request for sync trigger 
 const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) => {
     console.log("Sync App")
-    console.log(argocdSessionToken)
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
         method: 'POST',
@@ -49,10 +47,10 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
             reject(new Error(error));
         } else {
             if (response.statusCode == 200) {
-                console.log('[Info]:: the pong application has been synced');
+                console.log(`[Info]:: The ${argocdApplicationName} application has been synced`);
             } else {
-                console.log(`[Error]:: request to sync application pong returned status: ${response.statusCode}`)
-                throw error("failed to sync application in argocd")
+                console.log(`[Error]:: Request to sync application pong returned status: ${response.statusCode}`)
+                throw error("Failed to sync application in argocd")
             }
         }
     });
