@@ -32,7 +32,7 @@ const openSession = async (argocdClientSecret, argocdHost) => {
 
 // syncApplication is responsable for send request for sync trigger 
 const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) => {
-    console.log("Sync App")
+    console.log("[Info]:: Starting sync application")
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
         method: 'POST',
@@ -44,7 +44,7 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
 
     request(requestOptions, (error, response, body) => {
         if (error) {
-            reject(new Error(error));
+            throw Error(error)
         } else {
             if (response.statusCode == 200) {
                 console.log(`[Info]:: The ${argocdApplicationName} application has been synced`);

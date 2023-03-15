@@ -4,7 +4,6 @@ const argocd = require("./src/argocd")
 
 const getArgocdClientSecret = async (environmentPrefix) => {
     const secretName = `will-${environmentPrefix}-foundation-platforms-secret-argocd-admin`;
-    console.log(secretName)
     const secretString = await secretManager.getSecret(secretName, process.env.AWS_REGION);
 
     var secret = JSON.parse(secretString);
