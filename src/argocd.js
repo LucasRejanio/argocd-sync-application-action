@@ -1,7 +1,5 @@
 const request = require('request');
 
-const { err } = require("./utils/error")
-
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
     console.log(argocdClientSecret)
@@ -60,7 +58,7 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
     try {
         request(requestOptions, (error, response, body) => {
             if (error) {
-                err(error)
+                reject(new Error(error));
             } else {
                 if (response.statusCode == 200) {
                     console.log('[Info]:: the pong application has been synced');
