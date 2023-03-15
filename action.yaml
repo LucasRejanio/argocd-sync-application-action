@@ -1,8 +1,8 @@
 name: "Argocd Sync Application Action"
 description: "This action has the objective of simplify sync application in the argocd"
 inputs:
-  platforms-token:
-    description: 'Platforms user Token'
+  environment-prefix:
+    description: 'Environment prefix (dev, stg or prod)'
     required: true
   argocd-host:
     description: 'Enpoint ArgoCD'

@@ -1,6 +1,6 @@
-const checkActionInputs = async (platformsToken, argocdHost, argocdApplication) => {
-    if (platformsToken === "") {
-        throw Error("platforms-token not found");
+const checkActionInputs = async (environmentPrefix, argocdHost, argocdApplication) => {
+    if (environmentPrefix === "") {
+        throw Error("environment-prefix not found");
     };
     if (argocdHost === "") {
         throw Error("argocd-host not found");
