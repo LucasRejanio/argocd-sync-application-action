@@ -1,3 +1,5 @@
+const core = require("@actions/core");
+
 const secretManager = require("./src/utils/secret-manager")
 const configurator = require("./src/utils/configurator")
 const argocd = require("./src/argocd")
