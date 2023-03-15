@@ -55,18 +55,22 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
         json: true
     };
 
-    request(requestOptions, (error, response, body) => {
-        if (error) {
-            throw error(error)
-        } else {
-            if (response.statusCode == 200) {
-                console.log('[Info]:: the pong application has been synced');
+    try {
+        request(requestOptions, (error, response, body) => {
+            if (error) {
+                throw new Error(`${error}`);
             } else {
-                console.log(`[Error]:: request to sync application pong returned status: ${response.statusCode}`)
-                throw error("failed to sync application in argocd")
+                if (response.statusCode == 200) {
+                    console.log('[Info]:: the pong application has been synced');
+                } else {
+                    console.log(`[Error]:: request to sync application pong returned status: ${response.statusCode}`)
+                    throw error("failed to sync application in argocd")
+                }
             }
-        }
-    });
+        });   
+    } catch (error) {
+        throw error (error)
+    }
 }
 
 module.exports = {
