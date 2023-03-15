@@ -2,6 +2,7 @@ const request = require('request');
 
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
+    console.log("Open Session")
     console.log(argocdClientSecret)
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/session`,
@@ -46,6 +47,8 @@ const openSession = async (argocdClientSecret, argocdHost) => {
 
 // syncApplication is responsable for send request for sync trigger 
 const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) => {
+    console.log("Sync App")
+    console.log(argocdSessionToken)
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
         method: 'POST',
@@ -55,22 +58,18 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
         json: true
     };
 
-    try {
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                reject(new Error(error));
+    request(requestOptions, (error, response, body) => {
+        if (error) {
+            reject(new Error(error));
+        } else {
+            if (response.statusCode == 200) {
+                console.log('[Info]:: the pong application has been synced');
             } else {
-                if (response.statusCode == 200) {
-                    console.log('[Info]:: the pong application has been synced');
-                } else {
-                    console.log(`[Error]:: request to sync application pong returned status: ${response.statusCode}`)
-                    throw error("failed to sync application in argocd")
-                }
+                console.log(`[Error]:: request to sync application pong returned status: ${response.statusCode}`)
+                throw error("failed to sync application in argocd")
             }
-        });   
-    } catch (error) {
-        throw error (error)
-    }
+        }
+    });
 }
 
 module.exports = {

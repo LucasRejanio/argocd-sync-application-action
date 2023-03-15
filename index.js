@@ -23,7 +23,7 @@ const main = async () => {
     const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);
     const argocdSessionToken = await argocd.openSession(argocdClientSecret);
     
-    argocd.syncApplication(argocdSessionToken, process.env.APPLICATION_NAME)
+    argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication)
 };
 
 main();
