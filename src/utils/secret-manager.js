@@ -27,4 +27,4 @@ const getSecret = async (secretName, awsRegion) => {
 
 module.exports = {
     getSecret
-}
+};

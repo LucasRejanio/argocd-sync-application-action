@@ -1,5 +1,15 @@
 name: "Argocd Sync Application Action"
 description: "This action has the objective of simplify sync application in the argocd"
+inputs:
+  platforms-token:
+    description: 'Platforms user Token'
+    required: true
+  argocd-host:
+    description: 'Enpoint ArgoCD'
+    required: true
+  argocd-application:
+    description: 'Application in ArgoCD to sync'
+    required: true
 runs:
   using: "node16"
   main: "index.js"

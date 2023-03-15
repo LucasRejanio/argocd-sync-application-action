@@ -1,9 +1,9 @@
 const request = require('request');
 
 // openSession is responsible for sending request to argocd and getting session token
-const openSession = async (argocdClientSecret) => {
+const openSession = async (argocdClientSecret, argocdHost) => {
     const requestOptions = {
-        url: `https://argocd-${process.env.ENVIRONMET_PREFIX}.owill.com.br/api/v1/session`,
+        url: `https://${argocdHost}/api/v1/session`,
         method: 'POST',
         body: {
             username: 'admin',
@@ -30,9 +30,9 @@ const openSession = async (argocdClientSecret) => {
 }
 
 // syncApplication is responsable for send request for sync trigger 
-const syncApplication = (argocdSessionToken, applicationName) => {
+const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) => {
     const requestOptions = {
-        url: `https://argocd-${process.env.ENVIRONMET_PREFIX}.owill.com.br/api/v1/applications/${applicationName}/sync`,
+        url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${argocdSessionToken}`
@@ -57,4 +57,4 @@ const syncApplication = (argocdSessionToken, applicationName) => {
 module.exports = {
     openSession,
     syncApplication
-}
+};

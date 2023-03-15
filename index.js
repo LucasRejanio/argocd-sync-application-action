@@ -1,4 +1,5 @@
 const secretManager = require("./src/utils/secret-manager")
+const configurator = require("./src/utils/configurator")
 const argocd = require("./src/argocd")
 
 const getArgocdClientSecret = async () => {
@@ -14,7 +15,12 @@ const getArgocdClientSecret = async () => {
 };
 
 const main = async () => {
+    const platformsToken = core.getInput("platforms-token").toString();
+    const argocdHost = core.getInput("argocd-host").toString();
+    const argocdApplication = core.getInput("argocd-application").toString();
+
     try {
+        await configurator.checkActionInputs(platformsToken, argocdHost, argocdApplication)
         const argocdClientSecret = await getArgocdClientSecret();
         const argocdSessionToken = await argocd.openSession(argocdClientSecret);
 
