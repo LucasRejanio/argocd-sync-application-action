@@ -21,9 +21,9 @@ const main = async () => {
 
     await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication)
     const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);
-    const argocdSessionToken = await argocd.openSession(argocdClientSecret);
     
-    argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication)
+    const argocdSessionToken = await argocd.openSession(argocdClientSecret);
+    await argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication)
 };
 
 main();
