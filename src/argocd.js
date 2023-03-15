@@ -2,6 +2,7 @@ const request = require('request');
 
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
+    console.log(argocdClientSecret)
     const requestOptions = {
         url: `https://${argocdHost}/api/v1/session`,
         method: 'POST',
@@ -15,7 +16,7 @@ const openSession = async (argocdClientSecret, argocdHost) => {
     return new Promise((resolve, reject) => {
         request(requestOptions, (error, response, body) => {
             if (error) {
-                console.log("I don't know")
+                reject(new Error(error));
             } else {
                 if (response.statusCode == 200) {
                     console.log(`[Info]:: session with argocd opened successfully!`);
@@ -42,7 +43,7 @@ const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) 
 
     request(requestOptions, (error, response, body) => {
         if (error) {
-            reject(new Error(error));
+            throw error(error)
         } else {
             if (response.statusCode == 200) {
                 console.log('[Info]:: the pong application has been synced');
