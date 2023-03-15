@@ -15,7 +15,7 @@ const openSession = async (argocdClientSecret, argocdHost) => {
     return new Promise((resolve, reject) => {
         request(requestOptions, (error, response, body) => {
             if (error) {
-                throw error(error)
+                reject(new Error(error));
             } else {
                 if (response.statusCode == 200) {
                     console.log(`[Info]:: session with argocd opened successfully!`);
