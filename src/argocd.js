@@ -1,59 +1,62 @@
-const request = require('request');
+const axios = require('axios');
+const axiosRetry = require('axios-retry');
+
+// Setting the repeat
+axiosRetry(axios, { 
+    retries: 5, // Number of attempts
+    retryDelay: (retryCount) => {
+      return retryCount * 1000; // Delay em ms before retry
+    },
+    // retryCondition: (error) => {
+    //   return axiosRetry.isNetworkError(error) || (error.response.status >= 500 && error.response.status <= 599);
+    // }
+});
 
 // openSession is responsible for sending request to argocd and getting session token
 const openSession = async (argocdClientSecret, argocdHost) => {
-    console.log("[Info]:: Starting open argocd session")
+    console.log("[Info]:: Starting a session with argocd...");
     const requestOptions = {
-        url: `https://${argocdHost}/api/v1/session`,
         method: 'POST',
-        body: {
+        url: `https://${argocdHost}/api/v1/session`,
+        data: {
             username: 'admin',
             password: argocdClientSecret
         },
-        json: true
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        timeout: 10000
     };
 
-    return new Promise((resolve, reject) => {
-        request(requestOptions, (error, response, body) => {
-            if (error) {
-                reject(new Error(error));
-            } else {
-                if (response.statusCode == 200) {
-                    console.log(`[Info]:: Session with argocd opened successfully!`);
-                    resolve(body['token']);
-                } else {
-                    console.log(`[Info]:: Request to open argocd session returned status: ${response.statusCode}`);
-                    throw error("Failed to open session in argocd")
-                }
-            }
-        });
-    });
+    try {
+        const response = await axios(requestOptions);
+        console.log(`[Info]:: Session opened successfully!`);
+        return response.data.token;
+    } catch (error) {
+        const errorMessage = error.response && error.response.data ? error.response.data.message : error.message;
+        throw new Error(errorMessage);
+    }
 }
 
 // syncApplication is responsable for send request for sync trigger 
-const syncApplication = (argocdSessionToken, argocdHost, argocdApplicationName) => {
-    console.log("[Info]:: Starting sync application")
+const syncApplication = async (argocdSessionToken, argocdHost, argocdApplicationName) => {
+    console.log("[Info]:: Calling argocd to sync application...")
     const requestOptions = {
+        method: 'post',
         url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
-        method: 'POST',
         headers: {
             'Authorization': `Bearer ${argocdSessionToken}`
         },
-        json: true
+        timeout: 10000
     };
 
-    request(requestOptions, (error, response, body) => {
-        if (error) {
-            throw Error(error)
-        } else {
-            if (response.statusCode == 200) {
-                console.log(`[Info]:: The ${argocdApplicationName} application has been synced`);
-            } else {
-                console.log(`[Error]:: Request to sync application pong returned status: ${response.statusCode}`)
-                throw error("Failed to sync application in argocd")
-            }
-        }
-    });
+    try {
+        await axios(requestOptions);
+        console.log(`[Info]:: The ${argocdApplicationName} application has been synced!`);
+    } catch (error) {
+        const errorMessage = error.response && error.response.data ? error.response.data.message : error.message;
+        throw new Error(errorMessage);
+    }
 }
 
 module.exports = {

@@ -25,7 +25,7 @@ const main = async () => {
         const argocdSessionToken = await argocd.openSession(argocdClientSecret, argocdHost);
         await argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication)
     } catch (error) {
-        console.error(error)
+        console.error(error.message)
     }
 };
 
