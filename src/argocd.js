@@ -1,7 +1,7 @@
 const axios = require('axios');
 const axiosRetry = require('axios-retry');
 
-// Setting the repeat
+// Setting the axios retry
 axiosRetry(axios, { 
     retries: 5, // Number of attempts
     retryDelay: (retryCount) => {
@@ -13,7 +13,7 @@ axiosRetry(axios, {
 });
 
 // openSession is responsible for sending request to argocd and getting session token
-const openSession = async (argocdClientSecret, argocdHost) => {
+async function openSession (argocdClientSecret, argocdHost) {
     console.log("[Info]:: Starting a session with argocd...");
     const requestOptions = {
         method: 'POST',
@@ -39,7 +39,7 @@ const openSession = async (argocdClientSecret, argocdHost) => {
 }
 
 // syncApplication is responsable for send request for sync trigger 
-const syncApplication = async (argocdSessionToken, argocdHost, argocdApplicationName) => {
+async function syncApplication(argocdSessionToken, argocdHost, argocdApplicationName) {
     console.log("[Info]:: Calling argocd to sync application...")
     const requestOptions = {
         method: 'post',

@@ -11,7 +11,7 @@ const getArgocdClientSecret = async (environmentPrefix) => {
     return secret['configs.secret.argocdServerAdminPassword'];
 };
 
-const main = async () => {
+async function main() {
     const environmentPrefix = "dev"
     const argocdHost = "argocd-dev.owill.com.br"
     const argocdApplication = "pong"

@@ -13,7 +13,7 @@ const getArgocdClientSecret = async (environmentPrefix) => {
     return secret['configs.secret.argocdServerAdminPassword'];
 };
 
-const main = async () => {
+async function main() {
     const environmentPrefix = core.getInput("environment-prefix").toString();
     const argocdHost = core.getInput("argocd-host").toString();
     const argocdApplication = core.getInput("argocd-application").toString();
