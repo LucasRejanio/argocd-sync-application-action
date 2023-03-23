@@ -5,7 +5,7 @@ const axiosRetry = require('axios-retry');
 axiosRetry(axios, { 
     retries: 5, // Number of attempts
     retryDelay: (retryCount) => {
-      return retryCount * 1000; // Delay em ms before retry
+      return retryCount * 1000; // Delay in ms before retry
     },
     // retryCondition: (error) => {
     //   return axiosRetry.isNetworkError(error) || (error.response.status >= 500 && error.response.status <= 599);
