@@ -14,7 +14,7 @@ const getArgocdClientSecret = async (environmentPrefix) => {
 async function main() {
     const environmentPrefix = "dev"
     const argocdHost = "argocd-dev.owill.com.br"
-    const argocdApplication = "pong"
+    const argocdApplication = "userdept"
 
     await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication)
     const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);
