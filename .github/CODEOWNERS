@@ -1,0 +1,5 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @will-bank/delivery-platform will be requested for
+# review when someone opens a pull request.
+* @will-bank/delivery-platform
