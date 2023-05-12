@@ -16,14 +16,15 @@ async function main() {
     const argocdHost = "argocd-dev.owill.com.br"
     const argocdApplication = "userdept"
 
-    await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication)
+    await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication);
     const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);
     
     try {
         const argocdSessionToken = await argocd.openSession(argocdClientSecret, argocdHost);
-        await argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication)
+        await argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication);
     } catch (error) {
-        console.error(error.message)
+        console.error(error.message);
+        throw new Error('Error synchronizing the application on ArgoCD');
     }
 };
 
