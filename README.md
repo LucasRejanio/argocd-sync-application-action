@@ -1,4 +1,4 @@
-<img src="docs/images/argocd-logo.png" width="100">
+<img src="./assets/argocd-logo.png" width="100">
 
 # Argocd Sync Application Action
 This action has the objective of simplify sync application in the argocd
