@@ -5,7 +5,7 @@ application:
   type: workload
   owner: delivery-platform
   language: node
-  framework: github-actions
+  framework: github-action
   version: 0.1.1
 
 catalog:
