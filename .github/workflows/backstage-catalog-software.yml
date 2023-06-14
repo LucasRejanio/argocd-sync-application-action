@@ -1,0 +1,17 @@
+name: Backstage Catalog Software
+run-name: Backstage Catalog Software by ${{ github.actor }} ${{ github.run_number }}
+
+# You can get more details about the workflow and versions from the link below:
+# https://github.com/will-bank/backstage-catalog-software-workflow#readme
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  workflow:
+    uses: will-bank/backstage-catalog-software-workflow/.github/workflows/backstage-catalog-software.yml@v0.3.0    
+    secrets: inherit
