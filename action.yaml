@@ -1,14 +1,20 @@
 name: "Argocd Sync Application Action"
-description: "This action has the objective of simplify sync application in the argocd"
+description: "This action has the objective of simplify sync application in the argocd."
 inputs:
-  environment-prefix:
-    description: 'Environment prefix (dev, stg or prod)'
+  environment:
+    description: "Environment to run the action."
     required: true
   argocd-host:
-    description: 'Enpoint ArgoCD'
+    description: 'ArgoCD access endpoint.'
+    required: true
+  argocd-user:
+    description: 'ArgoCD access user.'
+    required: true
+  argocd-password:
+    description: 'ArgoCD access password.'
     required: true
   argocd-application:
-    description: 'Application in ArgoCD to sync'
+    description: 'Application to sync in the ArgoCD.'
     required: true
 runs:
   using: "node16"

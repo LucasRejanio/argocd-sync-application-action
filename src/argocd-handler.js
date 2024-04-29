@@ -13,14 +13,14 @@ axiosRetry(axios, {
 });
 
 // openSession is responsible for sending request to argocd and getting session token
-async function openSession (argocdClientSecret, argocdHost) {
+async function openSession (host, user, password) {
     console.log("[Info]:: Starting a session with argocd...");
     const requestOptions = {
         method: 'POST',
-        url: `https://${argocdHost}/api/v1/session`,
+        url: `https://${host}/api/v1/session`,
         data: {
-            username: 'admin',
-            password: argocdClientSecret
+            username: user,
+            password: password
         },
         headers: {
             'Content-Type': 'application/json'
@@ -39,25 +39,28 @@ async function openSession (argocdClientSecret, argocdHost) {
 }
 
 // syncApplication is responsable for send request for sync trigger 
-async function syncApplication(argocdSessionToken, argocdHost, argocdApplicationName) {
-    console.log("[Info]:: Calling argocd to sync application...")
+async function syncApplication(host, sessionToken, applicationName) {
+    console.log("[Info]:: Calling argocd to sync the application...");
     const requestOptions = {
-        method: 'post',
-        url: `https://${argocdHost}/api/v1/applications/${argocdApplicationName}/sync`,
+        method: 'POST',
+        url: `https://${host}/api/v1/applications/${applicationName}/sync`,
         headers: {
-            'Authorization': `Bearer ${argocdSessionToken}`
+            'Authorization': `Bearer ${sessionToken}`,
+            'Content-Type': 'application/json'
         },
         timeout: 10000
     };
 
     try {
         await axios(requestOptions);
-        console.log(`[Info]:: The ${argocdApplicationName} application has been synced!`);
+        console.log(`[Info]:: The ${applicationName} application has been synced!`);
+        console.log(`[Info]:: Check in the argocd console: https://${host}/applications/argocd/${applicationName}`);
     } catch (error) {
         const errorMessage = error.response && error.response.data ? error.response.data.message : error.message;
         throw new Error(errorMessage);
     }
 }
+
 
 module.exports = {
     openSession,

@@ -1,30 +1,22 @@
-const secretManager = require("./src/utils/secret-manager")
+const core = require("@actions/core");
+
 const configurator = require("./src/utils/configurator")
-const argocd = require("./src/argocd")
-
-const getArgocdClientSecret = async (environmentPrefix) => {
-    const secretName = `will-${environmentPrefix}-foundation-platforms-secret-argocd-admin`;
-    const secretString = await secretManager.getSecret(secretName, process.env.AWS_REGION);
-
-    var secret = JSON.parse(secretString);
-
-    return secret['configs.secret.argocdServerAdminPassword'];
-};
+const argocd = require("./src/argocd-handler")
 
 async function main() {
-    const environmentPrefix = "dev"
-    const argocdHost = "argocd-dev.owill.com.br"
-    const argocdApplication = "userdept"
+    const environment = "development"
+    const argocdHost = "example.com.br"
+    const argocdUser = "admin"
+    const argocdPassword = "Ex4mPl3"
+    const argocdApplication = "backstage-development"
 
-    await configurator.checkActionInputs(environmentPrefix, argocdHost, argocdApplication);
-    const argocdClientSecret = await getArgocdClientSecret(environmentPrefix);
+    await configurator.checkActionInputs(environment, argocdHost, argocdUser, argocdPassword, argocdApplication);
     
     try {
-        const argocdSessionToken = await argocd.openSession(argocdClientSecret, argocdHost);
-        await argocd.syncApplication(argocdSessionToken, argocdHost, argocdApplication);
+        const argocdSessionToken = await argocd.openSession(argocdHost, argocdUser, argocdPassword);
+        await argocd.syncApplication(argocdHost, argocdSessionToken, argocdApplication);
     } catch (error) {
         console.error(error.message);
-        throw new Error('Error synchronizing the application on ArgoCD');
     }
 };
 

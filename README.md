@@ -7,17 +7,22 @@ This action has the objective of simplify sync application in the argocd
 
 | Name | Description | Default | Required |
 |--- |--- |--- | --- |
-| environment-prefix | Environment prefix (dev, stg or prod) | Null | True |
-| argocd-host | The environment from workflow | Null | True |
-| argocd-application | Declar to set args for build | Null | True |
+| environment | Environment to run the action. | Null | True |
+| argocd-host | ArgoCD access endpoint. | Null | True |
+| argocd-user | ArgoCD access user. | Null | True |
+| argocd-password | ArgoCD access password. | Null | True |
+| argocd-application | Application to sync in the ArgoCD. | Null | True |
 
 ## Example usage
 
 ```yaml
+
 - name: Argocd Sync Application
-  uses: will-bank/argocd-sync-application-action@main
+  uses: ${{ env.ORGANIZATION_OR_USER }}/argocd-sync-application-action@main
   with:
-    environment-prefix: ${{ needs.build.outputs.environment-prefix }}
-    argocd-host: ${{ needs.build.outputs.argocd-host }}
-    argocd-application: ${{ needs.build.outputs.application-name }}
+    environment: ${{ env.ENVIRONMENT }}
+    argocd-host: ${{ env.YOUR_ARGOCD_HOST }}
+    argocd-user: ${{ env.YOUR_ARGOCD_USER }}
+    argocd-password: ${{ secrets.YOUR_ARGOCD_PASSWORD }}
+    argocd-application: ${{ env.YOUR_ARGOCD_APPLICATION }}
 ```
