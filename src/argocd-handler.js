@@ -81,7 +81,7 @@ async function validateApplicationRollout(host, sessionToken, applicationName) {
   };
 
   const startTime = Date.now();
-  const timeout = 210000; // 3,5 minutes
+  const timeout = 2700000; // 45 minutes in milliseconds
   const checkInterval = 5000; // 5 seconds
 
   while (Date.now() - startTime < timeout) {
