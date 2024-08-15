@@ -81,25 +81,33 @@ async function validateApplicationRollout(host, sessionToken, applicationName) {
   };
 
   const startTime = Date.now();
-  const timeout = 2700000; // 45 minutes in milliseconds
-  const checkInterval = 5000; // 5 seconds
+  const timeout = 2700000; // 45 minutos in milissegundos
+  const checkInterval = 5000; // 5 seconds in milissegundos
+  const retryInterval = 10000; // 10 seconds to wait before trying again in case of an operation in progress error
 
   while (Date.now() - startTime < timeout) {
     try {
       const response = await axios(requestOptions);
       const { sync, health } = response.data.status;
-      
-      statusMessage = `[Info]:: Checking status... Sync Status = ${sync.status}, Health Status = ${health.status}`;
+
+      const statusMessage = `[Info]:: Checking status... Sync Status = ${sync.status}, Health Status = ${health.status}`;
 
       if (sync.status === 'Synced' && health.status === 'Healthy') {
         console.log(`[Info]:: The ${applicationName} application is successfully rolled out!`);
         return;
-      }
-      else if (sync.status === 'OutOfSync' && health.status === 'Healthy') {
+      } else if (sync.status === 'OutOfSync' && health.status === 'Healthy') {
         console.log(statusMessage);
-        syncApplication(host, sessionToken, applicationName, false)
-      }
-      else if (health.status === 'Degraded' || health.status === 'Suspended' || health.status === 'Missing') {
+        try {
+          await syncApplication(host, sessionToken, applicationName, false);
+        } catch (error) {
+          if (error.message.includes("another operation is already in progress")) {
+            console.log(`[Warning]:: Another operation is already in progress. Retrying in ${retryInterval / 1000} seconds...`);
+            await new Promise(resolve => setTimeout(resolve, retryInterval));
+          } else {
+            throw error;
+          }
+        }
+      } else if (health.status === 'Degraded' || health.status === 'Suspended') {
         throw new Error(`The ${applicationName} application is in an error state. Health Status = ${health.status}`);
       } else {
         console.log(statusMessage);
